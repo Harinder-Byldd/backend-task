@@ -4,10 +4,13 @@ const app = express()
 const db = require('./db')
 const tickectRouter = require('./routes/ticketRouter')
 const commentRouter = require('./routes/commentRouter')
+const authRouter = require('./routes/authRouter')
+
 db()
 app.use(express.json())
 app.use('/api/ticket',tickectRouter)
 app.use('/api/comment',commentRouter)
+app.use('/api/auth',authRouter)
 app.listen(8000,(err)=>{
     if (err) throw new Error(err)
     console.log('server connected @',8000)

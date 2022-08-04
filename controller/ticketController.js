@@ -1,14 +1,21 @@
+const e = require('express');
 const Ticket= require('../models/TicketSchema')
 
 exports.addTicket = async(req,res)=>{
     try {
-       const {title,description} = req.body;
-      const ticket =  await Ticket.create({
-        title,description,status:'open'
-       })
-       res.json(ticket)
+        const user = req.user;
+        if(user){
+            const {title,description} = req.body;
+            const ticket =  await Ticket.create({
+              title,description,status:'open',tickedRaisedBy:user.id
+             })
+             res.json(ticket)
+        }else{
+            res.status(401).send({error:'User Not Authorised'})
+        }
+       
     } catch (error) {
-        throw new Error(error)
+        res.status(401).send({error:'User Not Authorised'})
     }
 }
 exports.getTickets = async(req,res)=>{
@@ -22,9 +29,11 @@ exports.getTickets = async(req,res)=>{
 
 exports.updateTicketStatus=async(req,res)=>{
     try {
-        const {id,status} = req.body
-        await Ticket.findOneAndUpdate(id,{status})
-        res.json(true)
+        if(req.user){
+            const {id,status} = req.body
+            await Ticket.findOneAndUpdate(id,{status})
+            res.json(true)
+        }
     } catch (error) {
         throw new Error(error)
     }
@@ -32,9 +41,12 @@ exports.updateTicketStatus=async(req,res)=>{
 
 exports.updateTicket=async(req,res)=>{
     try {
-        const {id,ticket} = req.body
-        await Ticket.findByIdAndUpdate(id,{title:ticket.title,description:ticket.description})
-        res.json(true)
+        if(req.user){
+            const {id,ticket} = req.body
+            await Ticket.findByIdAndUpdate(id,{title:ticket.title,description:ticket.description})
+            res.json(true)
+        }
+        
     } catch (error) {
         throw new Error(error)
     }
@@ -42,9 +54,12 @@ exports.updateTicket=async(req,res)=>{
 
 exports.deleteTicket=async(req,res)=>{
     try {
-        const {id} = req.body
-        await Ticket.findByIdAndDelete(id)
-        res.json(true)
+        if(req.user){
+            const {id} = req.body
+            await Ticket.findByIdAndDelete(id)
+            res.json(true)
+        }
+        
     } catch (error) {
         throw new Error(error)
     }

@@ -1,8 +1,8 @@
 const express = require('express')
 const commentController = require('../controller/commentController')
 const router = express.Router()
-
-router.post('/add',commentController.addComment)
-router.delete('/delete',commentController.deleteComment)
+const authController = require("../controller/authController")
+router.post('/add',authController.middleware,commentController.addComment)
+router.delete('/delete',authController.middleware,commentController.deleteComment)
 
 module.exports = router;

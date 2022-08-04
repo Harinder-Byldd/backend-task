@@ -13,6 +13,10 @@ const TicketSchema = mongoose.Schema({
         type:String,
         enum:['open','in progress','closed']
     },
+    tickedRaisedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    },
     comments:[{type:mongoose.Schema.Types.ObjectId,ref:Comment}]
 },{
     timestamps: {

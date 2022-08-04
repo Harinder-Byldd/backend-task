@@ -6,7 +6,8 @@ const mongoose = require('mongoose')
         required:true
     },
     commentBy:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
         required:true
     },
     postId:{
